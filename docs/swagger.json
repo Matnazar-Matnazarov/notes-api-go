@@ -1,0 +1,303 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Bu loyiha - Notes CRUD backend API. Foydalanuvchilar eslatmalar yaratish, ko'rish, yangilash va o'chirish imkoniyatiga ega.\nBu API RESTful prinsiplarga asoslangan va PostgreSQL database bilan ishlaydi.",
+        "title": "Notes API",
+        "contact": {
+            "name": "API Support",
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/notes": {
+            "get": {
+                "description": "Retrieve all notes from the database. Returns list of notes with response time in milliseconds.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Get all notes",
+                "responses": {
+                    "200": {
+                        "description": "Notes retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new note with title and content. Returns the created note with response time in milliseconds.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Create a new note",
+                "parameters": [
+                    {
+                        "description": "Note data",
+                        "name": "note",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.CreateNoteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Note created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request data",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/notes/{id}": {
+            "get": {
+                "description": "Retrieve a single note by its unique identifier. Returns note with response time in milliseconds.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Get a note by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Note ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Note retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid note ID",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Note not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing note by ID. Only provided fields will be updated. Returns updated note with response time in milliseconds.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Update a note",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Note ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Note data to update",
+                        "name": "note",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.UpdateNoteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Note updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request data",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Note not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Soft-delete a note by ID (marks as deleted but doesn't remove from database). Returns response time in milliseconds.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notes"
+                ],
+                "summary": "Delete a note",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Note ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Note deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid note ID",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Note not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_Matnazar-Matnazarov_notes-api-go_internal_models.CreateNoteRequest": {
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
+                "content": {
+                    "description": "Content is optional, max 10000 characters",
+                    "type": "string",
+                    "maxLength": 10000
+                },
+                "title": {
+                    "description": "Title is required, 1-255 characters",
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                }
+            }
+        },
+        "github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "type": "string",
+                    "example": "Detailed error information"
+                },
+                "error": {
+                    "type": "string",
+                    "example": "Error message"
+                },
+                "response_time_ms": {
+                    "type": "integer",
+                    "example": 15
+                }
+            }
+        },
+        "github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 10
+                },
+                "data": {},
+                "message": {
+                    "type": "string",
+                    "example": "Operation successful"
+                },
+                "response_time_ms": {
+                    "type": "integer",
+                    "example": 15
+                }
+            }
+        },
+        "github_com_Matnazar-Matnazarov_notes-api-go_internal_models.UpdateNoteRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "Optional content update",
+                    "type": "string",
+                    "maxLength": 10000
+                },
+                "title": {
+                    "description": "Optional title update",
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                }
+            }
+        }
+    }
+}

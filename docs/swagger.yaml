@@ -1,0 +1,213 @@
+basePath: /api/v1
+definitions:
+  github_com_Matnazar-Matnazarov_notes-api-go_internal_models.CreateNoteRequest:
+    properties:
+      content:
+        description: Content is optional, max 10000 characters
+        maxLength: 10000
+        type: string
+      title:
+        description: Title is required, 1-255 characters
+        maxLength: 255
+        minLength: 1
+        type: string
+    required:
+    - title
+    type: object
+  github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse:
+    properties:
+      details:
+        example: Detailed error information
+        type: string
+      error:
+        example: Error message
+        type: string
+      response_time_ms:
+        example: 15
+        type: integer
+    type: object
+  github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse:
+    properties:
+      count:
+        example: 10
+        type: integer
+      data: {}
+      message:
+        example: Operation successful
+        type: string
+      response_time_ms:
+        example: 15
+        type: integer
+    type: object
+  github_com_Matnazar-Matnazarov_notes-api-go_internal_models.UpdateNoteRequest:
+    properties:
+      content:
+        description: Optional content update
+        maxLength: 10000
+        type: string
+      title:
+        description: Optional title update
+        maxLength: 255
+        minLength: 1
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+  description: |-
+    Bu loyiha - Notes CRUD backend API. Foydalanuvchilar eslatmalar yaratish, ko'rish, yangilash va o'chirish imkoniyatiga ega.
+    Bu API RESTful prinsiplarga asoslangan va PostgreSQL database bilan ishlaydi.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Notes API
+  version: "1.0"
+paths:
+  /notes:
+    get:
+      description: Retrieve all notes from the database. Returns list of notes with
+        response time in milliseconds.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Notes retrieved successfully
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+      summary: Get all notes
+      tags:
+      - notes
+    post:
+      consumes:
+      - application/json
+      description: Create a new note with title and content. Returns the created note
+        with response time in milliseconds.
+      parameters:
+      - description: Note data
+        in: body
+        name: note
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.CreateNoteRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Note created successfully
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse'
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+      summary: Create a new note
+      tags:
+      - notes
+  /notes/{id}:
+    delete:
+      description: Soft-delete a note by ID (marks as deleted but doesn't remove from
+        database). Returns response time in milliseconds.
+      parameters:
+      - description: Note ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Note deleted successfully
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse'
+        "400":
+          description: Invalid note ID
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+        "404":
+          description: Note not found
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+      summary: Delete a note
+      tags:
+      - notes
+    get:
+      description: Retrieve a single note by its unique identifier. Returns note with
+        response time in milliseconds.
+      parameters:
+      - description: Note ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Note retrieved successfully
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse'
+        "400":
+          description: Invalid note ID
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+        "404":
+          description: Note not found
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+      summary: Get a note by ID
+      tags:
+      - notes
+    put:
+      consumes:
+      - application/json
+      description: Update an existing note by ID. Only provided fields will be updated.
+        Returns updated note with response time in milliseconds.
+      parameters:
+      - description: Note ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Note data to update
+        in: body
+        name: note
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.UpdateNoteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Note updated successfully
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.SuccessResponse'
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+        "404":
+          description: Note not found
+          schema:
+            $ref: '#/definitions/github_com_Matnazar-Matnazarov_notes-api-go_internal_models.ErrorResponse'
+      summary: Update a note
+      tags:
+      - notes
+schemes:
+- http
+- https
+swagger: "2.0"
